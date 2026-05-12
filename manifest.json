@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Job Tracker",
-  "version": "1.1",
+  "version": "1.2",
   "description": "Log job applications to Notion in one click",
   "permissions": [
     "activeTab",
@@ -12,9 +12,10 @@
     "https://*.linkedin.com/*",
     "https://*.ashbyhq.com/*",
     "https://*.greenhouse.io/*",
+    "https://*.workatastartup.com/*",
     "https://api.notion.com/*",
     "https://api.anthropic.com/*",
-    "https://*.workatastartup.com/*"
+    "<all_urls>"
   ],
   "action": {
     "default_popup": "popup.html",
@@ -29,7 +30,7 @@
       "matches": [
         "https://*.linkedin.com/*",
         "https://*.ashbyhq.com/*",
-        "https://*.greenhouse.io/*", 
+        "https://*.greenhouse.io/*",
         "https://*.workatastartup.com/*"
       ],
       "js": ["content.js"]

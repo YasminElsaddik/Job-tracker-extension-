@@ -19,22 +19,28 @@ async function init() {
   const actionArea = document.getElementById("action-area");
   const status = document.getElementById("status");
 
-  if (!siteName) {
-    siteInfo.innerHTML = `<p class="unsupported">Not a supported job site.<br>Open a LinkedIn, Ashby, or Greenhouse listing.</p>`;
-    return;
+  if (siteName) {
+    siteInfo.innerHTML = `<span class="site-badge">${siteName}</span>`;
+  } else {
+    siteInfo.innerHTML = `
+      <div style="background: var(--color-bg-subtle, #f5f5f3); border-radius: 8px; padding: 10px 12px; margin-bottom: 14px;">
+        <p style="font-size: 12px; color: #555; margin: 0 0 2px;">Site not auto-detected</p>
+        <p style="font-size: 11px; color: #999; margin: 0;">May be powered by Ashby, Greenhouse, or Lever</p>
+      </div>`;
   }
 
-  siteInfo.innerHTML = `<span class="site-badge">${siteName}</span>`;
-  actionArea.innerHTML = `
-  <button id="logBtn">Log this job</button>
-  <div style="text-align:center; margin-top: 12px;">
-    <a href="#" id="settingsLink" style="font-size:12px; color:#aaa; text-decoration:none;">Settings</a>
-  </div>`;
+  const buttonLabel = siteName ? "Log this job" : "Log anyway";
 
-	document.getElementById("settingsLink").addEventListener("click", (e) => { 
-		e.preventDefault();
-  		chrome.runtime.sendMessage({ action: "openOptions" });
-	});
+  actionArea.innerHTML = `
+    <button id="logBtn">${buttonLabel}</button>
+    <div style="text-align:center; margin-top: 12px;">
+      <a href="#" id="settingsLink" style="font-size:12px; color:#aaa; text-decoration:none;">Settings</a>
+    </div>`;
+
+  document.getElementById("settingsLink").addEventListener("click", (e) => {
+    e.preventDefault();
+    chrome.runtime.sendMessage({ action: "openOptions" });
+  });
 
   document.getElementById("logBtn").addEventListener("click", async () => {
     const btn = document.getElementById("logBtn");
@@ -64,7 +70,7 @@ async function init() {
             status.className = "error";
             status.textContent = "Error: " + response.error;
             btn.disabled = false;
-            btn.textContent = "Try again";
+            btn.textContent = buttonLabel;
           }
         }
       );
